@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+        <title>基于Arduino的宠物窝控制系统</title>
+</head>
+
+<body>
+    <div style="text-align:center;">
+        <h1>
+            宠物窝管理系统
+        </h1>
+
+        <div style="width:500px;float: center;margin:0 auto;">
+            <label for="username" style="font-size:18px">用户名：</label>
+            <div style="height:35px;width:400px;position:relative;display:inline">
+                <!--相关位置-->
+                <!--此处为相关位置与绝对位置联合使用-->
+                <input id="username" type="text" style="height:30px;width:350px;padding-right:50px;">
+                <span style="position:absolute;right:18px;top:2px;background-image:url(user.ico);height:16px;width:16px;display:inline-block;"></span>
+                <!--绝对位置-->
+            </div>
+            <br />
+            <br />
+            <label for="password1" style="font-size:18px">&nbsp&nbsp&nbsp密码：</label>
+            <div style="height:35px;width:400px;position:relative;display:inline">
+                <!--相关位置-->
+                <!--此处为相关位置与绝对位置联合使用-->
+                <input id="password1" type="password" style="height:30px;width:350px;padding-right:50px;">
+                <span style="position:absolute;right:16px;top:2px;background-image:url(p.ico);height:16px;width:16px;display:inline-block;"></span>
+                <!--绝对位置-->
+            </div>
+            <br />
+            <br />
+            <div style="width:426px;float: right;">
+                <script type="text/javascript">
+                    function post(URL, PARAMS) {
+                        var temp = document.createElement("form");
+                        temp.action = URL;
+                        temp.method = "post";
+                        temp.style.display = "none";
+                        for (var x in PARAMS) {
+                            var opt = document.createElement("textarea");
+                            opt.name = x;
+                            opt.value = PARAMS[x];
+                            temp.appendChild(opt);
+                        }
+                        document.body.appendChild(temp);
+                        temp.submit();
+                        return temp;
+                    }
+                </script>
+                <button type="button" onclick='post("http://192.168.0.188:8081/login",{name:"zhangsan"})' style="height:30px;width:400px;background-color:rgb(255,250,232);">
+					登陆
+				</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
