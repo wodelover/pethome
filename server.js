@@ -13,14 +13,14 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 
 // 导入mysql模块
-var mysql = require('mysql');
-// 配置数据库连接信息
-var db_connection = mysql.createConnection({
-    host: 'localhost',
-    database: 'pethome',
-    user: 'root',
-    password: '123456'
-});
+// var mysql = require('mysql');
+// // 配置数据库连接信息
+// var db_connection = mysql.createConnection({
+//     host: 'localhost',
+//     database: 'pethome',
+//     user: 'root',
+//     password: '123456'
+// });
 
 
 /*
