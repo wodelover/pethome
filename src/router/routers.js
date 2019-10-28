@@ -11,13 +11,15 @@ export default [{
         name: 'login',
         components: {
             default: Login
-        }
+        },
+        meta: {auth: false}
     },
     {
         path: '/index',
         name: 'index',
         components: {
             default: Index
-        }
+        },
+        meta: {auth: true}
     }
 ]

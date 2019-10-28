@@ -31,6 +31,11 @@ export default {
     methods: {
         onSubmitClicked(){
             if(this.username==='admin' && this.userpasswd === '123'){
+                var obj = {
+                    username: this.username,
+                    password: this.userpasswd
+                }
+                sessionStorage.setItem('user', JSON.stringify(obj));
                 this.$router.push('/index')
             }else{
                 console.log('123')
