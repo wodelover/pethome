@@ -30,31 +30,22 @@ export default {
   // 定义用户登录方法
   methods: {
     onSubmitClicked() {
-        this.$http.post('http://127.0.0.1:8081/login',{
-            params:{'username':this.username,'password':this.userpasswd}
-        }).then((response) =>{
-            console.log(response.data);
-        });
-    //   axios.post('http://127.0.0.1:8081/login',{'username':this.username,'password':this.userpasswd}).then(
-    //       response => {
-    //           resolve(response.data);
-    //       },
-    //       err => {
-    //           reject(err);
-    //       }
-    //   )
-    //   if (this.username === "admin" && this.userpasswd === "123") {
-    //     // 登陆成功并存储session
-    //     var obj = {
-    //       username: this.username,
-    //       password: this.userpasswd
-    //     };
-    //     sessionStorage.setItem("user", JSON.stringify(obj));
-    //     // 跳转到首页
-    //     this.$router.push("/index");
-    //   } else {
-    //     console.log("123");
-    //   }
+      this.$http.userLogin(this.username, this.userpasswd).then(resp => {
+        console.log(resp);
+        if (resp.data["loginStatus"]) {
+          // 登录成功
+          // 存储session
+          var obj = {
+            username: this.username,
+            password: this.userpasswd
+          };
+          sessionStorage.setItem("user", JSON.stringify(obj));
+          // 跳转到首页
+          this.$router.push("/index");
+        } else {
+          this.$message("用户名或者密码不正确");
+        }
+      });
     }
   }
 };

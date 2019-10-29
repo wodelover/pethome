@@ -11,7 +11,6 @@ var bodyParser = require('body-parser');
 // 创建 application/x-www-form-urlencoded 编码解析
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-
 // 导入mysql模块
 // var mysql = require('mysql');
 // // 配置数据库连接信息
@@ -22,6 +21,16 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 //     password: '123456'
 // });
 
+
+/* 跨域设置 */
+app.all('*', function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*'); //访问控制允许来源：所有
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept'); //访问控制允许报头 X-Requested-With: xhr请求
+    res.header('Access-Control-Allow-Metheds', 'PUT, POST, GET, DELETE, OPTIONS'); //访问控制允许方法
+    // res.header('X-Powered-By', 'nodejs'); //自定义头信息，表示服务端用nodejs
+    res.header('Content-Type', 'application/json;charset=utf-8');
+    next();
+});
 
 /*
     url:  127.0.0.1:8081/petroom
@@ -45,22 +54,33 @@ app.post('/petroom', function(req, res) {
 });
 
 /*
-    url:  127.0.0.1:8081/login
+    url:  127.0.0.1:8081/login 
     note: 网页首页登陆接口
 */
 app.post('/login', urlencodedParser, function(req, res) {
 
-    // 输出 JSON 格式
-    var response = {
+    // 获取用户名和密码
+    var request = {
         "username": req.body.username,
         "password": req.body.password
     };
-    console.log(response);
+
+    // 验证用户名和密码
+    console.log("username:" + request.username);
+    console.log("password:" + request.password);
+
+
+    // 返回是否验证成功
+    var response = {
+        "loginStatus": true
+    }
+    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    // 把json对象转换为json字符串
     res.end(JSON.stringify(response));
 });
 
 // 开启服务器监听
-var server = app.listen(8081, function() {
+var server = app.listen(8080, 'localhost' ,function() {
     var host = server.address().address;
     var port = server.address().port;
     console.log("listen at:%s %s", host, port);

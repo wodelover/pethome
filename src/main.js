@@ -8,12 +8,12 @@ import 'element-ui/lib/theme-chalk/index.css';
 // 导入路由器配置项
 import router from '@/router/index'
 
-// 导入axios用于http数据通信
-// import axios from 'axios'
+// 引入http数据传输模块,并导入所有方法
+import * as http from './requests/index'
+Vue.prototype.$http = http
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-
 
 // 跳转每个页面之前验证是否进行已经进行登陆
 router.beforeEach((to, from, next) => {

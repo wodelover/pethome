@@ -22,27 +22,6 @@ export default [{
         components: {
             default: Index
         },
-        children: [{
-                path: '/status',
-                name: 'status',
-                components: {
-                    default: StatusInfo
-                },
-                meta: {
-                    auth: true
-                }
-            },
-            {
-                path: '/remotecontrol',
-                name: 'remotecontrol',
-                components: {
-                    default: remoteControl
-                },
-                meta: {
-                    auth: true
-                }
-            }
-        ],
         meta: { auth: true } // 用于保存是否需要进行登陆验证
     }
 ]
