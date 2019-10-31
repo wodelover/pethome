@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <el-container>
-      <el-header>header</el-header>
+      <el-header>基于Arduino的宠物窝控制系统</el-header>
       <el-tabs tab-position="left">
         <el-tab-pane label="状态信息">
           <StatusPage></StatusPage>
@@ -47,10 +47,10 @@ export default {
 }
 
 .el-header,.el-footer {
-  background-color: #b3c0d1;
-  color: #333;
+  background-color: #84b7a1;
   text-align: center;
   line-height: 60px;
+  font-size: 25px;
 }
 
 body > .el-container {
