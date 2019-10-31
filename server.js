@@ -50,8 +50,23 @@ app.post('/petroom', function(req, res) {
 
     // 连接数据接收完成信号
     req.on('end', function() {
-        console.log("recvdata:" + data);
-        res.send(data);
+        // 接收到硬件的完整数据: {'temp':0.00,'crash':0,'fire':0,'air':0,'light':0,'keepTemp':0}
+        console.log(data);
+        var aaa = JSON.parse(data);
+        temp = data['temp'];
+        fireStatus = Boolean(data['fire']);
+        homeStatus = Boolean(data['crash']);
+        lightStatus = Boolean(data['light']);
+        changeAirStatus = Boolean(data['air']);
+        keepTempStatus = Boolean(data['keepTemp']);
+
+        // 定义返回的数据包
+        var respone = {
+            'L': Number(lightStatus), // 是否开灯
+            'A': Number(changeAirStatus), // 是否排气
+            'K': Number(keepTempStatus) // 是否保持恒温
+        };
+        res.send(JSON.stringify(respone));
     });
 
     // 连接有新数据到来信号
@@ -81,7 +96,7 @@ app.post('/login', urlencodedParser, function(req, res) {
     var response = {
         "loginStatus": true
     }
-    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     // 把json对象转换为json字符串
     res.end(JSON.stringify(response));
 });
@@ -90,13 +105,13 @@ app.post('/login', urlencodedParser, function(req, res) {
  * url: 127.0.0.1:8000/light
  * note: 打开照明接口
  */
-app.post('/light',urlencodedParser,function(req,res){
+app.post('/light', urlencodedParser, function(req, res) {
     var lightStatus = req.body.lightStatus;
-    console.log('lightStatus:'+lightStatus);
+    console.log('lightStatus:' + lightStatus);
     var response = {
         "lightStatus": lightStatus
     }
-    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     // 把json对象转换为json字符串
     res.end(JSON.stringify(response));
 });
@@ -105,13 +120,13 @@ app.post('/light',urlencodedParser,function(req,res){
  * url: 127.0.0.1:8000/air
  * note: 打开换气接口
  */
-app.post('/air',urlencodedParser,function(req,res){
+app.post('/air', urlencodedParser, function(req, res) {
     var airStatus = req.body.airStatus;
-    console.log('airStatus:'+airStatus);
+    console.log('airStatus:' + airStatus);
     var response = {
         "airStatus": airStatus
     }
-    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     // 把json对象转换为json字符串
     res.end(JSON.stringify(response));
 });
@@ -120,28 +135,28 @@ app.post('/air',urlencodedParser,function(req,res){
  * url: 127.0.0.1:8000/keepTemp
  * note: 打开恒温接口
  */
-app.post('/keepTemp',urlencodedParser,function(req,res){
+app.post('/keepTemp', urlencodedParser, function(req, res) {
     var keepTempStatus = req.body.keepTempStatus;
-    console.log('keepTempStatus:'+keepTempStatus);
+    console.log('keepTempStatus:' + keepTempStatus);
     var response = {
         "keepTempStatus": keepTempStatus
     }
-    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     // 把json对象转换为json字符串
-    res.end(JSON.stringify(response));
+    // res.end(JSON.stringify(response));
 });
 
 /**
  * url: 127.0.0.1:8000/petDefaultStatus
  * note: 获取默认状态
  */
-app.get('/petDefaultStatus',urlencodedParser,function(req,res){
+app.get('/petDefaultStatus', urlencodedParser, function(req, res) {
     var response = {
         "temp": temp,
         'fire': fireStatus,
         'home': homeStatus
     }
-    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     // 把json对象转换为json字符串
     res.end(JSON.stringify(response));
 });
@@ -150,19 +165,19 @@ app.get('/petDefaultStatus',urlencodedParser,function(req,res){
  * url: 127.0.0.1:8000/petDefaultStatus
  * note: 获取默认控制信息状态
  */
-app.get('/controlDefaultStatus',urlencodedParser,function(req,res){
+app.get('/controlDefaultStatus', urlencodedParser, function(req, res) {
     var response = {
         "light": lightStatus,
         'changeAir': changeAirStatus,
         'keepTemp': keepTempStatus
     }
-    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     // 把json对象转换为json字符串
     res.end(JSON.stringify(response));
 });
 
-// 开启服务器监听
-var server = app.listen(8080, 'localhost' ,function() {
+// 开启服务器监听,这里不能填写IP地址,否则无法接收到硬件的数据
+var server = app.listen(8080, function() {
     var host = server.address().address;
     var port = server.address().port;
     console.log("listen at:%s %s", host, port);
