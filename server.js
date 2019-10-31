@@ -21,7 +21,6 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 //     password: '123456'
 // });
 
-
 /* 跨域设置 */
 app.all('*', function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*'); //访问控制允许来源：所有
@@ -32,8 +31,16 @@ app.all('*', function(req, res, next) {
     next();
 });
 
+/* 定义系统用到的所有的中间变量 */
+var temp = '0'; // 温度
+var fireStatus = false; // 是否有可燃气体
+var homeStatus = false; // 是否在窝里面
+var lightStatus = false; // 照明是否打开
+var changeAirStatus = false; // 是否在打开换气
+var keepTempStatus = false; // 是否开启恒温
+
 /*
-    url:  127.0.0.1:8081/petroom
+    url:  127.0.0.1:8080/petroom
     note: 硬件数据回传接口地址，数据返回也通过此接口地址
 */
 app.post('/petroom', function(req, res) {
@@ -54,7 +61,7 @@ app.post('/petroom', function(req, res) {
 });
 
 /*
-    url:  127.0.0.1:8081/login 
+    url:  127.0.0.1:8080/login 
     note: 网页首页登陆接口
 */
 app.post('/login', urlencodedParser, function(req, res) {
@@ -73,6 +80,81 @@ app.post('/login', urlencodedParser, function(req, res) {
     // 返回是否验证成功
     var response = {
         "loginStatus": true
+    }
+    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    // 把json对象转换为json字符串
+    res.end(JSON.stringify(response));
+});
+
+/**
+ * url: 127.0.0.1:8000/light
+ * note: 打开照明接口
+ */
+app.post('/light',urlencodedParser,function(req,res){
+    var lightStatus = req.body.lightStatus;
+    console.log('lightStatus:'+lightStatus);
+    var response = {
+        "lightStatus": lightStatus
+    }
+    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    // 把json对象转换为json字符串
+    res.end(JSON.stringify(response));
+});
+
+/**
+ * url: 127.0.0.1:8000/air
+ * note: 打开换气接口
+ */
+app.post('/air',urlencodedParser,function(req,res){
+    var airStatus = req.body.airStatus;
+    console.log('airStatus:'+airStatus);
+    var response = {
+        "airStatus": airStatus
+    }
+    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    // 把json对象转换为json字符串
+    res.end(JSON.stringify(response));
+});
+
+/**
+ * url: 127.0.0.1:8000/keepTemp
+ * note: 打开恒温接口
+ */
+app.post('/keepTemp',urlencodedParser,function(req,res){
+    var keepTempStatus = req.body.keepTempStatus;
+    console.log('keepTempStatus:'+keepTempStatus);
+    var response = {
+        "keepTempStatus": keepTempStatus
+    }
+    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    // 把json对象转换为json字符串
+    res.end(JSON.stringify(response));
+});
+
+/**
+ * url: 127.0.0.1:8000/petDefaultStatus
+ * note: 获取默认状态
+ */
+app.get('/petDefaultStatus',urlencodedParser,function(req,res){
+    var response = {
+        "temp": temp,
+        'fire': fireStatus,
+        'home': homeStatus
+    }
+    res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
+    // 把json对象转换为json字符串
+    res.end(JSON.stringify(response));
+});
+
+/**
+ * url: 127.0.0.1:8000/petDefaultStatus
+ * note: 获取默认控制信息状态
+ */
+app.get('/controlDefaultStatus',urlencodedParser,function(req,res){
+    var response = {
+        "light": lightStatus,
+        'changeAir': changeAirStatus,
+        'keepTemp': keepTempStatus
     }
     res.writeHead(200, {'Content-Type': 'application/json; charset=utf-8'});
     // 把json对象转换为json字符串
