@@ -32,7 +32,7 @@ app.all('*', function(req, res, next) {
 });
 
 /* 定义系统用到的所有的中间变量 */
-var temp = '0'; // 温度
+var temperature = "0"; // 温度
 var fireStatus = false; // 是否有可燃气体
 var homeStatus = false; // 是否在窝里面
 var lightStatus = false; // 照明是否打开
@@ -50,15 +50,14 @@ app.post('/petroom', function(req, res) {
 
     // 连接数据接收完成信号
     req.on('end', function() {
-        // 接收到硬件的完整数据: {'temp':0.00,'crash':0,'fire':0,'air':0,'light':0,'keepTemp':0}
-        console.log(data);
-        var aaa = JSON.parse(data);
-        temp = data['temp'];
-        fireStatus = Boolean(data['fire']);
-        homeStatus = Boolean(data['crash']);
-        lightStatus = Boolean(data['light']);
-        changeAirStatus = Boolean(data['air']);
-        keepTempStatus = Boolean(data['keepTemp']);
+        // 接收到硬件的完整数据(注意最外层应该使用单引号): {"temp":22.00,"crash":0,"fire":0,"air":0,"light":0,"keepTemp":0}
+        var temp = JSON.parse(data);
+        temperature = String(temp['temp']);
+        fireStatus = Boolean(temp['fire']);
+        homeStatus = Boolean(temp['crash']);
+        lightStatus = Boolean(temp['light']);
+        changeAirStatus = Boolean(temp['air']);
+        keepTempStatus = Boolean(temp['keepTemp']);
 
         // 定义返回的数据包
         var respone = {
@@ -87,11 +86,6 @@ app.post('/login', urlencodedParser, function(req, res) {
         "password": req.body.password
     };
 
-    // 验证用户名和密码
-    console.log("username:" + request.username);
-    console.log("password:" + request.password);
-
-
     // 返回是否验证成功
     var response = {
         "loginStatus": true
@@ -106,13 +100,11 @@ app.post('/login', urlencodedParser, function(req, res) {
  * note: 打开照明接口
  */
 app.post('/light', urlencodedParser, function(req, res) {
-    var lightStatus = req.body.lightStatus;
-    console.log('lightStatus:' + lightStatus);
+    lightStatus = req.body.lightStatus;
     var response = {
         "lightStatus": lightStatus
     }
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    // 把json对象转换为json字符串
     res.end(JSON.stringify(response));
 });
 
@@ -121,13 +113,11 @@ app.post('/light', urlencodedParser, function(req, res) {
  * note: 打开换气接口
  */
 app.post('/air', urlencodedParser, function(req, res) {
-    var airStatus = req.body.airStatus;
-    console.log('airStatus:' + airStatus);
+    changeAirStatus = req.body.airStatus;
     var response = {
-        "airStatus": airStatus
+        "airStatus": changeAirStatus
     }
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    // 把json对象转换为json字符串
     res.end(JSON.stringify(response));
 });
 
@@ -136,14 +126,12 @@ app.post('/air', urlencodedParser, function(req, res) {
  * note: 打开恒温接口
  */
 app.post('/keepTemp', urlencodedParser, function(req, res) {
-    var keepTempStatus = req.body.keepTempStatus;
-    console.log('keepTempStatus:' + keepTempStatus);
+    keepTempStatus = req.body.keepTempStatus;
     var response = {
         "keepTempStatus": keepTempStatus
     }
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-    // 把json对象转换为json字符串
-    // res.end(JSON.stringify(response));
+    res.end(JSON.stringify(response));
 });
 
 /**
@@ -152,10 +140,11 @@ app.post('/keepTemp', urlencodedParser, function(req, res) {
  */
 app.get('/petDefaultStatus', urlencodedParser, function(req, res) {
     var response = {
-        "temp": temp,
+        "temp": temperature,
         'fire': fireStatus,
         'home': homeStatus
     }
+    console.log(response);
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     // 把json对象转换为json字符串
     res.end(JSON.stringify(response));

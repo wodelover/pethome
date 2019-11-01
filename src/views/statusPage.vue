@@ -55,7 +55,7 @@ export default {
     return {
       // 定义温度图片和数值变量
       tempPath: tempPath,
-      currentTemp: 15,
+      currentTemp: 0,
 
       // 定义可燃气体图片和文本显示
       firePath: noFirePath,
