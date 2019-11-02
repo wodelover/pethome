@@ -52,6 +52,7 @@ app.post('/petroom', function(req, res) {
     req.on('end', function() {
         // 接收到硬件的完整数据(注意最外层应该使用单引号): {"temp":22.00,"crash":0,"fire":0,"air":0,"light":0,"keepTemp":0}
         var temp = JSON.parse(data);
+        // console.log(temp);
         temperature = String(temp['temp']);
         fireStatus = Boolean(temp['fire']);
         homeStatus = Boolean(temp['crash']);
@@ -140,11 +141,11 @@ app.post('/keepTemp', urlencodedParser, function(req, res) {
  */
 app.get('/petDefaultStatus', urlencodedParser, function(req, res) {
     var response = {
-        "temp": temperature,
-        'fire': fireStatus,
-        'home': homeStatus
-    }
-    console.log(response);
+            "temp": temperature,
+            'fire': fireStatus,
+            'home': homeStatus
+        }
+        // console.log(response);
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     // 把json对象转换为json字符串
     res.end(JSON.stringify(response));
