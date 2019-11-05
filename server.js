@@ -80,7 +80,7 @@ app.post('/petroom', function(req, res) {
 });
 
 /*
-    url:  127.0.0.1:8080/login 
+    url:  127.0.0.1:8080/login
     note: 网页首页登陆接口
 */
 app.post('/login', urlencodedParser, function(req, res) {
