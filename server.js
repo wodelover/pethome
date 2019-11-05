@@ -39,9 +39,9 @@ var lightStatus = false; // 照明是否打开
 var changeAirStatus = false; // 是否在打开换气
 var keepTempStatus = false; // 是否开启恒温
 
-var hardLightStatus = false; // 硬件照明是否打开
-var hardChangeAirStatus = false; // 硬件是否在打开换气
-var hardKeepTempStatus = false; // 硬件是否开启恒温
+var hardLightStatus = 0; // 硬件照明是否打开
+var hardChangeAirStatus = 0; // 硬件是否在打开换气
+var hardKeepTempStatus = 0; // 硬件是否开启恒温
 
 /*
     url:  127.0.0.1:8080/petroom
@@ -56,7 +56,7 @@ app.post('/petroom', function(req, res) {
     req.on('end', function() {
         // 接收到硬件的完整数据(注意最外层应该使用单引号): {"temp":22.00,"crash":0,"fire":0,"air":0,"light":0,"keepTemp":0}
         var temp = JSON.parse(data);
-        // console.log(temp);
+        console.log(temp);
         temperature = String(temp['temp']);
         fireStatus = Boolean(temp['fire']);
         homeStatus = Boolean(temp['crash']);
@@ -64,13 +64,12 @@ app.post('/petroom', function(req, res) {
         changeAirStatus = Boolean(temp['air']);
         keepTempStatus = Boolean(temp['keepTemp']);
 
-        // 定义返回的数据包
-        var respone = {
-            'L': Number(hardLightStatus), // 是否开灯
-            'A': Number(hardChangeAirStatus), // 是否排气
-            'K': Number(hardKeepTempStatus) // 是否保持恒温
-        };
-        res.send(JSON.stringify(respone));
+
+        // 定义返回的数据包 {"L":1,"A":0,"K":1}
+        var res_data = '{"L":' + hardLightStatus.toString(); // 是否开灯
+        res_data += ',"A":' + hardChangeAirStatus.toString(); // 是否排气
+        res_data += ',"K":' + hardKeepTempStatus.toString() + '}'; // 是否保持恒温
+        res.send(res_data);
     });
 
     // 连接有新数据到来信号
@@ -105,7 +104,12 @@ app.post('/login', urlencodedParser, function(req, res) {
  * note: 打开照明接口
  */
 app.post('/light', urlencodedParser, function(req, res) {
-    hardLightStatus = req.body.lightStatus;
+
+    if ('true' == req.body.lightStatus.toString()) {
+        hardLightStatus = 1;
+    } else {
+        hardLightStatus = 0;
+    }
     var response = {
         "lightStatus": hardLightStatus
     }
@@ -118,7 +122,11 @@ app.post('/light', urlencodedParser, function(req, res) {
  * note: 打开换气接口
  */
 app.post('/air', urlencodedParser, function(req, res) {
-    hardChangeAirStatus = req.body.airStatus;
+    if ('true' == req.body.airStatus.toString()) {
+        hardChangeAirStatus = 1;
+    } else {
+        hardChangeAirStatus = 0;
+    }
     var response = {
         "airStatus": hardChangeAirStatus
     }
@@ -131,7 +139,11 @@ app.post('/air', urlencodedParser, function(req, res) {
  * note: 打开恒温接口
  */
 app.post('/keepTemp', urlencodedParser, function(req, res) {
-    hardKeepTempStatus = req.body.keepTempStatus;
+    if ('true' == req.body.keepTempStatus.toString()) {
+        hardKeepTempStatus = 1;
+    } else {
+        hardKeepTempStatus = 0;
+    }
     var response = {
         "keepTempStatus": hardKeepTempStatus
     }

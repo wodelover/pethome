@@ -37,52 +37,40 @@ export default {
   data() {
     return {
       lightStatus: false,
-      lightStatusText: "已关闭照明",
+      lightStatusText: "照明",
       changeOfAirStatus: false,
-      changeOfAirStatusText: "已关闭换气",
+      changeOfAirStatusText: "换气",
       keepTempStatus: false,
-      keepTempStatusText: "已关闭恒温"
+      keepTempStatusText: "恒温"
     };
   },
-  created(){//当刷新网页后重新请求转态信息
-    this.getUpdate();
-  },
+
   methods: {
-    getUpdate(){
-      setInterval(() => {
-        this.$http.getControlDefaultStatus().then(resp => {
-          this.lightStatus = resp.data.light;
-          this.changeOfAirStatus = resp.data.changeAir;
-          this.keepTempStatus = resp.data.keepTemp;
-        });
-      }, 2000);
-    },
+    // getUpdate() {
+    //   setInterval(() => {
+    //     this.$http.getControlDefaultStatus().then(resp => {
+    //       this.lightStatus = resp.data.light;
+    //       // if ("true" === this.lightStatus) {
+    //       //   this.lightStatusText = "已打开照明";
+    //       // } else {
+    //       //   this.lightStatusText = "已关闭照明";
+    //       // }
+
+    //       this.changeOfAirStatus = resp.data.changeAir;
+    //       // this.onChangeOfAirStatusChanged();
+    //       this.keepTempStatus = resp.data.keepTemp;
+    //       // this.onKeepTempStatusChanged();
+    //     });
+    //   }, 2000);
+    // },
     onLightStatusChanged() {
-      this.$http.changeLightStatus(this.lightStatus).then(resp => {
-        if ('true' === resp.data.lightStatus) {
-          this.lightStatusText = "已打开照明";
-        }else{
-          this.lightStatusText = "已关闭照明";
-        }
-      });
+      this.$http.changeLightStatus(this.lightStatus).then(resp => {});
     },
     onChangeOfAirStatusChanged() {
-      this.$http.changeAirStatus(this.changeOfAirStatus).then(resp => {
-        if ('true' === resp.data.airStatus) {
-          this.changeOfAirStatusText = "已打开换气";
-        } else{
-          this.changeOfAirStatusText = "已关闭换气";
-        }
-      });
+      this.$http.changeAirStatus(this.changeOfAirStatus).then(resp => {});
     },
     onKeepTempStatusChanged() {
-      this.$http.changeKeepTempStatus(this.keepTempStatus).then(resp => {
-        if ('true' === resp.data.keepTempStatus) {
-          this.keepTempStatusText = "已打开恒温";
-        } else {
-          this.keepTempStatusText = "已关闭恒温";
-        }
-      });
+      this.$http.changeKeepTempStatus(this.keepTempStatus).then(resp => {});
     }
   }
 };
