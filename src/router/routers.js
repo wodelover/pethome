@@ -1,8 +1,6 @@
 // 这个文件是配置页面路由
 import Index from '@/views/index'
-import Login from '@/views/login'
-import StatusInfo from '@/views/statusPage'
-import remoteControl from '@/views/remoteControlPage'
+import Login from '@/components/login'
 
 export default [{
         path: '/',
