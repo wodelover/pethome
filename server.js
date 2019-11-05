@@ -39,6 +39,10 @@ var lightStatus = false; // 照明是否打开
 var changeAirStatus = false; // 是否在打开换气
 var keepTempStatus = false; // 是否开启恒温
 
+var hardLightStatus = false; // 硬件照明是否打开
+var hardChangeAirStatus = false; // 硬件是否在打开换气
+var hardKeepTempStatus = false; // 硬件是否开启恒温
+
 /*
     url:  127.0.0.1:8080/petroom
     note: 硬件数据回传接口地址，数据返回也通过此接口地址
@@ -61,9 +65,9 @@ app.post('/petroom', function(req, res) {
 
         // 定义返回的数据包
         var respone = {
-            'L': Number(lightStatus), // 是否开灯
-            'A': Number(changeAirStatus), // 是否排气
-            'K': Number(keepTempStatus) // 是否保持恒温
+            'L': Number(hardLightStatus), // 是否开灯
+            'A': Number(hardChangeAirStatus), // 是否排气
+            'K': Number(hardKeepTempStatus) // 是否保持恒温
         };
         res.send(JSON.stringify(respone));
     });
@@ -100,9 +104,9 @@ app.post('/login', urlencodedParser, function(req, res) {
  * note: 打开照明接口
  */
 app.post('/light', urlencodedParser, function(req, res) {
-    lightStatus = req.body.lightStatus;
+    hardLightStatus = req.body.lightStatus;
     var response = {
-        "lightStatus": lightStatus
+        "lightStatus": hardLightStatus
     }
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify(response));
@@ -113,9 +117,9 @@ app.post('/light', urlencodedParser, function(req, res) {
  * note: 打开换气接口
  */
 app.post('/air', urlencodedParser, function(req, res) {
-    changeAirStatus = req.body.airStatus;
+    hardChangeAirStatus = req.body.airStatus;
     var response = {
-        "airStatus": changeAirStatus
+        "airStatus": hardChangeAirStatus
     }
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify(response));
@@ -126,9 +130,9 @@ app.post('/air', urlencodedParser, function(req, res) {
  * note: 打开恒温接口
  */
 app.post('/keepTemp', urlencodedParser, function(req, res) {
-    keepTempStatus = req.body.keepTempStatus;
+    hardKeepTempStatus = req.body.keepTempStatus;
     var response = {
-        "keepTempStatus": keepTempStatus
+        "keepTempStatus": hardKeepTempStatus
     }
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
     res.end(JSON.stringify(response));
