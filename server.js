@@ -11,16 +11,6 @@ var bodyParser = require('body-parser');
 // 创建 application/x-www-form-urlencoded 编码解析
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-// 导入mysql模块
-// var mysql = require('mysql');
-// // 配置数据库连接信息
-// var db_connection = mysql.createConnection({
-//     host: 'localhost',
-//     database: 'pethome',
-//     user: 'root',
-//     password: '123456'
-// });
-
 /* 跨域设置 */
 app.all('*', function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*'); //访问控制允许来源：所有
